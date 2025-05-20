@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>基于idapy与LLM接口实现全自动化二进制漏洞分析 | HRP</title>
+    <meta name="author" content="HRP" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <!-- KaTeX CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body);
+  });
+</script>
+<link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HRP</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HRP</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>基于idapy与LLM接口实现全自动化二进制漏洞分析</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/2/10
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/auto-analysis/" style="color: #00a596">
+                    auto analysis
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>这个应该是我开年做的最有意义的一件事情了。目前工具不打算开源，但是实际实现也不复杂，不是吗？</p>
+<p>选择的样本是我曾经挖掘过的totolink</p>
+<p>版本：_TOTOLINK_C818KR-1C_A830R_IP04393_8197F_SPI_8M64M_V4.1.2cu.5182_B20201102_ALL</p>
+<p>目标程序为固件里面的downloadFile.cgi</p>
+<span id="more"></span>
+
+<h1 id="漏洞报告图"><a href="#漏洞报告图" class="headerlink" title="漏洞报告图"></a>漏洞报告图</h1><p>下面是自动化生成的docx文档报告</p>
+<img width="602" alt="Image" src="https://github.com/user-attachments/assets/d561acc2-a7fb-4cf3-a182-f314bbbdb241" />
+
+<p><img src="https://github.com/user-attachments/assets/63b44190-0b50-4800-b1cf-74edc569d38a" alt="Image"></p>
+<img width="542" alt="Image" src="https://github.com/user-attachments/assets/e81537bc-20dc-4c3b-a886-1ed0a27284d7" />
+
+<img width="554" alt="Image" src="https://github.com/user-attachments/assets/9c355464-e1a8-4a36-b66f-a76cac636702" />
+
+<img width="542" alt="Image" src="https://github.com/user-attachments/assets/bf0f46b9-d415-4518-84f9-00a947f7f0ba" />
+
+<p><img src="https://github.com/user-attachments/assets/e721c950-50a1-4dea-8ac1-11fc9ad343e7" alt="Image"></p>
+<h1 id="漏洞报告文档"><a href="#漏洞报告文档" class="headerlink" title="漏洞报告文档"></a>漏洞报告文档</h1><p>下面是纯文本分析</p>
+<pre><code>================================================================================
+                                   二进制安全分析报告                                    
+生成时间：2025-02-10 21:16:18
+================================================================================
+
+[风险概况]--------------------------------------------------------------------------
+▪ 发现高危函数：6 个
+▪ 总漏洞路径：32 条
+▪ 风险分布：
+  9.8      [▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇                 ] 2 个漏洞
+  8.1      [▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇] 3 个漏洞
+  7.5      [▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇                                  ] 1 个漏洞
+
+[详细漏洞分析]-----------------------------------------------------------------------
+1. 目标函数：strcpy
+   ▪ CWE 类型：CWE-120
+   ▪ CVSS 评分：9.8
+   ▪ 影响版本：All versions
+   ▪ 漏洞路径：
+     ├─ sub_401724 (401724)
+       │  ├─ main (4017b8)
+       │      └─ strcpy (400c00)
+     ├─ sub_401724 (401724)
+       │  ├─ main (4017b8)
+       │      └─ strcpy (400c00)
+     ├─ main (4017b8)
+         └─ strcpy (400c00)
+     ├─ main (4017b8)
+         └─ strcpy (400c00)
+     ├─ main (4017b8)
+         └─ strcpy (400c00)
+     ├─ main (4017b8)
+         └─ strcpy (400c00)
+     ├─ main (4017b8)
+         └─ strcpy (400c00)
+   ▪ 漏洞描述：缓冲区溢出漏洞，由于使用strcpy函数进行字符串拷贝时未进行长度校验，可能导致缓冲区溢出。
+   ▪ 触发逻辑：[&#39;QUERY_STRING → v14 → v3 → v25 → v4 → v26 → strcpy(v26, v4)&#39;, &#39;QUERY_STRING → v14 → v3 → v25 → v5 → v27 → strcpy(v27, v5)&#39;, &#39;QUERY_STRING → v14 → v3 → v25 → v4 → v26 → strcpy(v26, v4)&#39;, &#39;QUERY_STRING → v14 → v3 → v25 → v5 → v27 → strcpy(v27, v5)&#39;]
+   ▪ 修复建议：
+     • 使用strncpy替代strcpy，确保拷贝长度不超过目标缓冲区大小
+     • 在拷贝前进行长度校验，确保源字符串长度不超过目标缓冲区大小
+2. 目标函数：printf
+   ▪ CWE 类型：CWE-134
+   ▪ CVSS 评分：8.1
+   ▪ 影响版本：All versions
+   ▪ 漏洞路径：
+     ├─ sub_400FE0 (400fe0)
+       │  ├─ sub_4012BC (4012bc)
+       │    │  ├─ main (4017b8)
+       │    │      └─ printf (400c20)
+     ├─ sub_400FE0 (400fe0)
+       │  ├─ sub_4012BC (4012bc)
+       │    │  ├─ main (4017b8)
+       │    │      └─ printf (400c20)
+     ├─ main (4017b8)
+         └─ printf (400c20)
+   ▪ 漏洞描述：格式化字符串漏洞，由于printf函数直接使用未经验证的用户输入作为格式化字符串参数，可能导致信息泄露或任意代码执行。
+   ▪ 触发逻辑：[&#39;环境变量QUERY_STRING → v14 → v24 → printf&#39;, &#39;环境变量QUERY_STRING → v14 → v22 → printf&#39;]
+   ▪ 修复建议：
+     • 使用printf时，避免直接使用用户输入作为格式化字符串，应使用固定字符串
+     • 使用snprintf等安全函数替代printf
+3. 目标函数：system
+   ▪ CWE 类型：CWE-78
+   ▪ CVSS 评分：9.8
+   ▪ 影响版本：All versions
+   ▪ 漏洞路径：
+     ├─ main (4017b8)
+         └─ system (400ca0)
+     ├─ main (4017b8)
+         └─ system (400ca0)
+     ├─ main (4017b8)
+         └─ system (400ca0)
+     ├─ main (4017b8)
+         └─ system (400ca0)
+     ├─ main (4017b8)
+         └─ system (400ca0)
+     ├─ main (4017b8)
+         └─ system (400ca0)
+     ├─ main (4017b8)
+         └─ system (400ca0)
+   ▪ 漏洞描述：通过环境变量QUERY_STRING传递的命令字符串未经过滤直接传递给system函数执行，存在命令注入漏洞。
+   ▪ 触发逻辑：[&#39;QUERY_STRING (环境变量) → v14 (未过滤) → v24 (格式化字符串) → system (危险函数)&#39;]
+   ▪ 修复建议：
+     • 使用安全的函数替代system，如execve，并严格限制命令参数
+     • 对QUERY_STRING进行严格的输入验证和过滤，移除所有可能的命令注入字符
+4. 目标函数：strtok
+   ▪ CWE 类型：CWE-120
+   ▪ CVSS 评分：8.1
+   ▪ 影响版本：All versions
+   ▪ 漏洞路径：
+     ├─ sub_401724 (401724)
+       │  ├─ main (4017b8)
+       │      └─ strtok (400d30)
+     ├─ sub_401724 (401724)
+       │  ├─ main (4017b8)
+       │      └─ strtok (400d30)
+     ├─ main (4017b8)
+         └─ strtok (400d30)
+     ├─ main (4017b8)
+         └─ strtok (400d30)
+     ├─ main (4017b8)
+         └─ strtok (400d30)
+   ▪ 漏洞描述：缓冲区溢出漏洞，由于使用strtok函数处理输入数据时未进行长度校验，可能导致缓冲区溢出。
+   ▪ 触发逻辑：[&#39;QUERY_STRING → v14 → v25 → strtok → strcpy → v26&#39;, &#39;QUERY_STRING → v14 → v25 → strtok → strcpy → v27&#39;]
+   ▪ 修复建议：
+     • 使用strncpy替代strcpy，确保拷贝长度不超过目标缓冲区大小。
+     • 在strtok使用前，对输入数据进行长度校验。
+5. 目标函数：sprintf
+   ▪ CWE 类型：CWE-120
+   ▪ CVSS 评分：8.1
+   ▪ 影响版本：All versions
+   ▪ 漏洞路径：
+     ├─ sub_4012BC (4012bc)
+       │  ├─ main (4017b8)
+       │      └─ sprintf (400dc0)
+     ├─ main (4017b8)
+         └─ sprintf (400dc0)
+     ├─ main (4017b8)
+         └─ sprintf (400dc0)
+     ├─ main (4017b8)
+         └─ sprintf (400dc0)
+     ├─ main (4017b8)
+         └─ sprintf (400dc0)
+     ├─ main (4017b8)
+         └─ sprintf (400dc0)
+     ├─ main (4017b8)
+         └─ sprintf (400dc0)
+     ├─ main (4017b8)
+         └─ sprintf (400dc0)
+     ├─ main (4017b8)
+         └─ sprintf (400dc0)
+   ▪ 漏洞描述：sprintf函数存在缓冲区溢出风险，由于未对输入字符串长度进行校验，可能导致目标缓冲区溢出。
+   ▪ 触发逻辑：[&#39;环境变量QUERY_STRING → v14 → v24 → sprintf(v24, &quot;echo QUERY_STRING:%s &gt; /tmp/download&quot;, v14)&#39;, &#39;环境变量QUERY_STRING → v14 → v3 → v25 → v4 → v26 → v5 → v27 → Object → v6 → v18 → v7 → v19 → v20 → v8 → sprintf(v24, &quot;echo appId:%s versionId:%s path:%s fileName:%s &gt;&gt; /tmp/download&quot;, v26, v27, v8, v20)&#39;]
+   ▪ 修复建议：
+     • 使用snprintf替代sprintf，限制输出字符串的长度。
+     • 在sprintf调用前，对输入字符串进行长度校验，确保不超过目标缓冲区大小。
+6. 目标函数：access
+   ▪ CWE 类型：CWE-22
+   ▪ CVSS 评分：7.5
+   ▪ 影响版本：All versions
+   ▪ 漏洞路径：
+     ├─ sub_4012BC (4012bc)
+       │  ├─ main (4017b8)
+       │      └─ access (400e00)
+   ▪ 漏洞描述：路径遍历漏洞，由于未对用户输入进行有效校验，攻击者可以通过构造恶意路径访问系统文件。
+   ▪ 触发逻辑：[&#39;环境变量QUERY_STRING→v14→v24→system调用&#39;, &#39;access函数调用路径：sub_4012BC→main→access&#39;]
+   ▪ 修复建议：
+     • 对用户输入进行严格的路径校验，禁止使用相对路径或特殊字符。
+     • 使用安全的文件访问函数，如openat，避免直接使用access函数。
+
+[附录]---------------------------------------------------------------------------
+▣ 漏洞评级标准：
+  - CRITICAL (9.0-10.0)  关键漏洞
+  - HIGH (7.0-8.9)       高危漏洞
+  - MEDIUM (4.0-6.9)     中危漏洞
+  - LOW (0.1-3.9)        低危漏洞
+</code></pre>
+<h1 id="固件漏洞指明图"><a href="#固件漏洞指明图" class="headerlink" title="固件漏洞指明图"></a>固件漏洞指明图</h1><p>下面是固件漏洞，如果看了报告分析的就知道 分析准确率不说百分百，百分之90也是有的。</p>
+<img width="590" alt="Image" src="https://github.com/user-attachments/assets/48f6c83f-4e0d-4e9f-a225-c7cb5a630b0e" />
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2024 - 2025 HRP
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;HRP
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

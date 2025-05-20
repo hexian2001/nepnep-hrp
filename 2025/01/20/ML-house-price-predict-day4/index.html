@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>ML-house_price_predict-day4 | HRP</title>
+    <meta name="author" content="HRP" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <!-- KaTeX CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body);
+  });
+</script>
+<link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HRP</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HRP</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>ML-house_price_predict-day4</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/1/20
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/ml/" style="color: #ffa2c4">
+                    ml
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>直接上kaggle进行实战，选了个比较好入门的比赛题目，房价预测</p>
+<p><a target="_blank" rel="noopener" href="https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/overview">House Prices - Advanced Regression Techniques | Kaggle</a></p>
+<span id="more"></span>
+
+<p>1038&#x2F;4635</p>
+<img width="910" alt="Image" src="https://github.com/user-attachments/assets/df5ca2cb-b311-49fa-b3a1-bd9e6a9e5a16" />
+
+<p>代码</p>
+<p>还得是fastai 简简单单就能做到一个不错的结果</p>
+<pre><code class="python">from fastai.tabular.all import *
+import pandas as pd
+import numpy as np
+import torch
+import matplotlib.pyplot as plt
+from fastai.metrics import R2Score
+
+device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+
+# 加载数据
+train_df = pd.read_csv(&#39;train.csv&#39;)
+test_df = pd.read_csv(&#39;test.csv&#39;)
+
+# 定义目标列和特征列
+target = &#39;SalePrice&#39;
+num_cols = train_df.select_dtypes(include=&#39;number&#39;).columns.tolist()
+cat_cols = train_df.select_dtypes(exclude=&#39;number&#39;).columns.tolist()
+
+# 缺失值处理
+for col in num_cols:
+    if col != target:
+        train_df[col].fillna(train_df[col].median(), inplace=True)
+        test_df[col].fillna(train_df[col].median(), inplace=True)
+
+# 对数转换目标列
+train_df[target] = np.log1p(train_df[target])
+
+# 特征分离 把房价和Id 2个无关数据剔除
+X_train = train_df.drop(columns=[target, &#39;Id&#39;])
+X_test = test_df.drop(columns=[&#39;Id&#39;])
+
+# 数据预处理
+cont_names = [col for col in X_train.columns if col not in cat_cols]
+cat_names = [col for col in X_train.columns if col in cat_cols]
+
+# 创建DataLoader
+train_dl = TabularDataLoaders.from_df(train_df, path=&#39;.&#39;, y_names=target, cat_names=cat_names, cont_names=cont_names,
+                                      procs=[Categorify, FillMissing, Normalize], bs=64)
+
+# 训练模型 采用多个评估方法
+learn = tabular_learner(train_dl, layers=[4000, 2000, 1000, 500], metrics=[rmse, mae, R2Score()], wd=1e-2)
+
+# 将模型转移到GPU
+learn.to(device)
+
+# 查找最适合的学习率
+learn.lr_find()
+
+# 学习率曲线
+plt.figure()
+learn.recorder.plot_lr_find()
+plt.savefig(&#39;lr_find_plot.png&#39;)
+
+# 使用OneCycleLR进行训练
+learn.fit_one_cycle(500, lr_max=1e-3)
+
+# 绘制损失曲线
+plt.figure()
+learn.recorder.plot_loss()
+plt.savefig(&#39;loss_plot.png&#39;)
+
+# 预测测试集
+test_dl = learn.dls.test_dl(X_test)
+test_preds, _ = learn.get_preds(dl=test_dl)
+
+# 反转对数转换
+test_preds = np.expm1(test_preds)
+
+# 保存预测结果
+test_df[&#39;SalePrice&#39;] = test_preds
+test_df[[&#39;Id&#39;, &#39;SalePrice&#39;]].to_csv(&#39;predictions.csv&#39;, index=False)
+
+print(&quot;预测结果已保存到 predictions.csv&quot;)
+</code></pre>
+<p>预测CSV点此下载</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/user-attachments/files/18471332/predictions.csv">predictions.csv</a></p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2024 - 2025 HRP
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;HRP
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

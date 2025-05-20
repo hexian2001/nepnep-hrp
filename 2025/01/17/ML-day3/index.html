@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>ML-day3 | HRP</title>
+    <meta name="author" content="HRP" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <!-- KaTeX CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body);
+  });
+</script>
+<link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HRP</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HRP</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>ML-day3</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/1/17
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/ml/" style="color: #ffa2c4">
+                    ml
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>经过前面2天的学习，对基本的ML有了了解，但是为了更好的学习和应用，我决定转化到fastai的课程上去学习，他们的思维模式和教学模式更符合我的需求。也就是不是告诉你XX是YY，而且告诉你 what can u do &amp; what u need do。</p>
+<p><a target="_blank" rel="noopener" href="https://course.fast.ai/">Practical Deep Learning for Coders - Practical Deep Learning</a></p>
+<span id="more"></span>
+
+<p>下面的第一节课的代码，我自己重写了下，思路不变还是利用fastai的便利，自带学习机和模型，只需要提供数据集即可。</p>
+<p>用Unsplash来获取图片数据集。</p>
+<p>我非常认可fastai的理念，训练并不是需要大量的数据集和超硬核的机器。</p>
+<pre><code class="python">import os
+import requests
+from fastai.vision.all import *
+from PIL import Image
+from pathlib import Path
+
+# 设置 Unsplash API Access Key
+UNSPLASH_ACCESS_KEY = &#39;x&#39;
+
+# 1. 使用 Unsplash API 获取图片
+def search_images(query, max_images=10):
+    &quot;&quot;&quot;
+    使用 Unsplash API 搜索图像并返回图片 URL。
+    &quot;&quot;&quot;
+    url = f&quot;https://api.unsplash.com/photos/random?query=&#123;query&#125;&amp;count=&#123;max_images&#125;&amp;client_id=&#123;UNSPLASH_ACCESS_KEY&#125;&quot;
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        results = response.json()
+        image_urls = [result[&#39;urls&#39;][&#39;regular&#39;] for result in results]
+        return image_urls
+    else:
+        print(f&quot;Error: &#123;response.status_code&#125;&quot;)
+        return []
+
+# 2. 下载图像到指定文件夹
+def download_images(urls, folder_name):
+    &quot;&quot;&quot;
+    下载图像到指定文件夹。
+    &quot;&quot;&quot;
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+
+    for i, url in enumerate(urls):
+        try:
+            img_data = requests.get(url).content
+            with open(f&quot;&#123;folder_name&#125;/&#123;i+1&#125;.jpg&quot;, &quot;wb&quot;) as f:
+                f.write(img_data)
+            print(f&quot;Downloaded image &#123;i+1&#125;&quot;)
+        except Exception as e:
+            print(f&quot;Error downloading image &#123;i+1&#125;: &#123;e&#125;&quot;)
+
+# 3. 下载鸟类和森林图片
+bird_urls = search_images(&quot;bird&quot;, max_images=10)
+forest_urls = search_images(&quot;forest&quot;, max_images=10)
+
+download_images(bird_urls, &#39;bird_images&#39;)
+download_images(forest_urls, &#39;forest_images&#39;)
+
+# 4. 准备数据集
+def prepare_dataset(bird_folder, forest_folder):
+    &quot;&quot;&quot;
+    将下载的图片移动到分类文件夹中，生成所需的文件夹结构。
+    &quot;&quot;&quot;
+    # 创建目标文件夹
+    target_folder = &#39;images&#39;
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+
+    # 将鸟类图片移动到 &quot;bird&quot; 文件夹
+    bird_target = os.path.join(target_folder, &#39;bird&#39;)
+    if not os.path.exists(bird_target):
+        os.makedirs(bird_target)
+
+    # 将森林类图片移动到 &quot;forest&quot; 文件夹
+    forest_target = os.path.join(target_folder, &#39;forest&#39;)
+    if not os.path.exists(forest_target):
+        os.makedirs(forest_target)
+
+    # 移动文件
+    for img in os.listdir(bird_folder):
+        img_path = os.path.join(bird_folder, img)
+        if img.endswith(&#39;.jpg&#39;):
+            os.rename(img_path, os.path.join(bird_target, img))
+
+    for img in os.listdir(forest_folder):
+        img_path = os.path.join(forest_folder, img)
+        if img.endswith(&#39;.jpg&#39;):
+            os.rename(img_path, os.path.join(forest_target, img))
+
+prepare_dataset(&#39;bird_images&#39;, &#39;forest_images&#39;)
+
+# 5. 加载数据集
+path = Path(&#39;images&#39;)
+dls = ImageDataLoaders.from_folder(
+    path, 
+    valid_pct=0.2,  # 使用 20% 的数据进行验证
+    seed=42,  # 固定随机种子，确保结果一致
+    item_tfms=Resize(224),  # 图像预处理，将图片大小调整为224x224
+    batch_tfms=aug_transforms()  # 数据增强
+)
+
+# 6. 创建 CNN 模型
+learn = cnn_learner(dls, resnet34, metrics=accuracy)
+
+# 7. 训练模型
+learn.fine_tune(1)
+
+# 8. 评估模型
+learn.show_results()
+
+# 9. 进行预测
+img_path = &#39;xxxx.jpg&#39;  # 替换为你要进行预测的图像路径
+img = PILImage.create(img_path)
+pred, pred_idx, probs = learn.predict(img)
+
+# 打印预测结果
+print(f&#39;预测标签: &#123;pred&#125;; 预测概率: &#123;probs&#125;&#39;)
+
+# 10. 保存和加载模型
+learn.save(&#39;bird_forest_model&#39;)  # 保存模型
+
+# 加载保存的模型
+learn.load(&#39;bird_forest_model&#39;)
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2024 - 2025 HRP
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;HRP
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

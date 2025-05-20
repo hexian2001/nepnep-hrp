@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>ML-Titanic-day5 | HRP</title>
+    <meta name="author" content="HRP" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <!-- KaTeX CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body);
+  });
+</script>
+<link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HRP</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HRP</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>ML-Titanic-day5</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/1/24
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/ml/" style="color: #03a9f4">
+                    ml
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>优化了脚本，补全了一些缺失。</p>
+<pre><code>submission_fastai.csv
+Complete · 10s ago
+0.76315
+</code></pre>
+<p>比之前好太多了</p>
+<span id="more"></span>
+
+<pre><code>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+# fastai
+from fastai.tabular.all import *
+
+# ========== 1. 读取数据 ==========
+path = Path(&#39;.&#39;)  # 假设脚本和数据在同一目录
+train_df_raw = pd.read_csv(path/&#39;train.csv&#39;)
+test_df_raw = pd.read_csv(path/&#39;test.csv&#39;)
+
+# ========== 2. 删除无用列 ==========
+# 这些列通常对预测贡献不大或很难利用，直接丢弃
+useless_cols = [&#39;PassengerId&#39;,&#39;Name&#39;,&#39;Ticket&#39;,&#39;Cabin&#39;]
+for c in useless_cols:
+    if c in train_df_raw.columns:
+        train_df_raw.drop(c, axis=1, inplace=True)
+    if c in test_df_raw.columns:
+        test_df_raw.drop(c, axis=1, inplace=True)
+
+# ========== 3. 处理可能出现但训练集中无缺失的列（如 Fare）==========
+# 如果训练集里Fare没有缺失，而测试集有 =&gt; fastai FillMissing会报nan assertion错误
+# 因此手动填补测试集的Fare缺失(如用训练集的中位数)
+if train_df_raw[&#39;Fare&#39;].isnull().sum() == 0 and test_df_raw[&#39;Fare&#39;].isnull().sum() &gt; 0:
+    fare_median = train_df_raw[&#39;Fare&#39;].median()
+    test_df_raw[&#39;Fare&#39;] = test_df_raw[&#39;Fare&#39;].fillna(fare_median)
+
+# 如果Embarked缺失较少，也可手动丢弃对应行，或让fastai自动FillMissing
+# 例如强行删掉极少量缺失Embarked的行
+if train_df_raw[&#39;Embarked&#39;].isnull().sum() &gt; 0:
+    train_df_raw.dropna(subset=[&#39;Embarked&#39;], inplace=True)
+
+# 查看缺失情况
+print(&quot;训练集各列缺失数：\n&quot;, train_df_raw.isnull().sum())
+print(&quot;测试集各列缺失数：\n&quot;, test_df_raw.isnull().sum())
+
+# ========== 4. fastai 表格分类的关键配置 ==========
+y_name = &#39;Survived&#39;  # 目标列
+cat_names = [&#39;Pclass&#39;,&#39;Sex&#39;,&#39;Embarked&#39;]   # 类别特征
+cont_names = [&#39;Age&#39;,&#39;SibSp&#39;,&#39;Parch&#39;,&#39;Fare&#39;]  # 数值特征
+
+# fastai 建议将标签转为分类类型（若它是0/1 int也可不转）
+train_df_raw[y_name] = train_df_raw[y_name].astype(&#39;category&#39;)
+
+# ========== 5. 构建 DataLoaders 并划分验证集 ==========
+# 利用 random splitter 拆分 80%训练/20%验证
+splits = RandomSplitter(valid_pct=0.2, seed=42)(range_of(train_df_raw))
+
+dls = TabularDataLoaders.from_df(
+    df=train_df_raw,
+    path=&#39;.&#39;,
+    cat_names=cat_names,
+    cont_names=cont_names,
+    y_names=y_name,
+    y_block=CategoryBlock(),  # 指明这是一个分类任务
+    procs=[Categorify, FillMissing, Normalize],  # fastai流水线
+    splits=splits,
+    bs=64
+)
+
+# 看看一个batch
+dls.show_batch()
+
+# ========== 6. 创建模型并训练 ==========
+learn = tabular_learner(
+    dls,
+    layers=[200,100],   # 两层隐藏层(可调)
+    metrics=accuracy
+)
+
+# 可用learn.lr_find()搜索学习率，这里直接设个1e-3
+learn.fit_one_cycle(120, 1e-3)  # 训练5epoch
+
+# 查看验证集表现
+val_loss, val_acc = learn.validate()
+print(f&#39;验证集: loss=&#123;val_loss:.4f&#125;, accuracy=&#123;val_acc:.4f&#125;&#39;)
+
+# 也可查看混淆矩阵
+interp = ClassificationInterpretation.from_learner(learn)
+interp.plot_confusion_matrix(figsize=(4,4))
+
+# ========== 7. 对测试集做推断并生成提交文件 ==========
+# fastai 默认: 先构建 test_dl
+test_dl = learn.dls.test_dl(test_df_raw)
+
+# 获取预测概率
+preds, _ = learn.get_preds(dl=test_dl)
+# argmax转成0/1
+class_preds = preds.argmax(dim=1).numpy()
+
+# kaggle提交 需要  PassengerId + Survived
+# 因为前面我们删掉了 test_df_raw 里的PassengerId，需要重新读取
+test_ids = pd.read_csv(path/&#39;test.csv&#39;, usecols=[&#39;PassengerId&#39;])
+
+submission = pd.DataFrame(&#123;
+    &#39;PassengerId&#39;: test_ids[&#39;PassengerId&#39;],
+    &#39;Survived&#39;: class_preds
+&#125;)
+
+submission.to_csv(&#39;submission_fastai.csv&#39;, index=False)
+print(&quot;预测提交文件已保存: submission_fastai.csv&quot;)
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2024 - 2025 HRP
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;HRP
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

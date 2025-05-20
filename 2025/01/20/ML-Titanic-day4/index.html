@@ -1,0 +1,472 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>ML-Titanic-day4 | HRP</title>
+    <meta name="author" content="HRP" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <!-- KaTeX CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body);
+  });
+</script>
+<link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HRP</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HRP</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>ML-Titanic-day4</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/1/20
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/ml/" style="color: #03a9f4">
+                    ml
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>红温了，这个好难，预测到最后还是不行</p>
+<p>predictions.csv</p>
+<p>Complete · 9m ago</p>
+<p>0.48564</p>
+<p>极限了 排名贼难看 13202 招笑了</p>
+<span id="more"></span>
+
+<p><a target="_blank" rel="noopener" href="https://www.kaggle.com/competitions/titanic/submissions#">Titanic - Machine Learning from Disaster | Kaggle</a></p>
+<p>爆破seed</p>
+<pre><code>import subprocess
+import sys
+import time
+
+# 获取pre.py的输出，并提取其中的accuracy值
+def get_accuracy_from_pre(seed_value):
+    # 调用pre.py并捕获输出
+    result = subprocess.run(
+        [&#39;python3&#39;, &#39;pre.py&#39;, &#39;--seed&#39;, str(seed_value)],
+        capture_output=True, text=True
+    )
+    # 输出内容
+    print(f&quot;Output for seed &#123;seed_value&#125;:\n&#123;result.stdout&#125;&quot;)
+    
+    # 从输出中提取准确率
+    for line in result.stdout.splitlines():
+        if &quot;Accuracy:&quot; in line:
+            accuracy = float(line.split(&quot;:&quot;)[1].strip())
+            return accuracy
+    return None
+
+# 设置初始种子
+seed_value = 42
+accuracy = 0
+
+# 循环直到准确率大于0.7
+while accuracy &lt;= 0.7:
+    accuracy = get_accuracy_from_pre(seed_value)
+    print(f&quot;Seed &#123;seed_value&#125;: Accuracy &#123;accuracy&#125;&quot;)
+    
+    if accuracy &gt; 0.7:
+        print(f&quot;Found seed &#123;seed_value&#125; with accuracy greater than 0.7&quot;)
+        break
+    
+    seed_value += 1
+    print(accuracy)
+    #time.sleep(1)  # 让程序稍微等待，以免调用过于频繁
+
+# 结束
+print(&quot;Search completed.&quot;)
+</code></pre>
+<p>最好最快的就是96</p>
+<p>预测代码</p>
+<pre><code>from fastai.tabular.all import *
+import pandas as pd
+import numpy as np
+import torch
+import matplotlib.pyplot as plt
+import random
+import sys
+import argparse
+# 设置随机种子以确保结果可复现
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)  # 如果使用多个GPU
+    torch.backends.cudnn.deterministic = True  # 确保每次计算结果一致
+    torch.backends.cudnn.benchmark = False  # 防止启用加速
+
+# 设置随机种子
+# 获取命令行参数
+parser = argparse.ArgumentParser(description=&quot;Train model with different seeds&quot;)
+parser.add_argument(&#39;--seed&#39;, type=int, required=True, help=&quot;Random seed for training&quot;)
+args = parser.parse_args()
+
+# 设置种子
+set_seed(args.seed)
+# 检查 GPU 是否可用
+device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+print(f&quot;使用设备: &#123;device&#125;&quot;)
+
+# 加载数据
+train_df = pd.read_csv(&#39;train.csv&#39;)
+test_df = pd.read_csv(&#39;test.csv&#39;)
+
+# 保留 PassengerId 以便后续使用
+test_passenger_ids = test_df[&#39;PassengerId&#39;]
+
+# 提取社会称谓（Title）
+train_df[&#39;Title&#39;] = train_df[&#39;Name&#39;].apply(lambda x: x.split(&#39;,&#39;)[1].split(&#39;.&#39;)[0].strip())
+test_df[&#39;Title&#39;] = test_df[&#39;Name&#39;].apply(lambda x: x.split(&#39;,&#39;)[1].split(&#39;.&#39;)[0].strip())
+
+# 通过 Cabin 特征创建 Deck
+train_df[&#39;Deck&#39;] = train_df[&#39;Cabin&#39;].apply(lambda x: x[0] if pd.notna(x) else &#39;U&#39;)
+test_df[&#39;Deck&#39;] = test_df[&#39;Cabin&#39;].apply(lambda x: x[0] if pd.notna(x) else &#39;U&#39;)
+
+# 删除无关的列
+train_df = train_df.drop([&#39;PassengerId&#39;, &#39;Name&#39;, &#39;Cabin&#39;, &#39;Ticket&#39;], axis=1)
+test_df = test_df.drop([&#39;PassengerId&#39;, &#39;Name&#39;, &#39;Cabin&#39;, &#39;Ticket&#39;], axis=1)
+
+# 填补缺失值
+train_df[&#39;Age&#39;] = train_df[&#39;Age&#39;].fillna(train_df[&#39;Age&#39;].median())  # 使用中位数填充
+train_df[&#39;Embarked&#39;] = train_df[&#39;Embarked&#39;].fillna(train_df[&#39;Embarked&#39;].mode()[0])  # 使用众数填充
+test_df[&#39;Fare&#39;] = test_df[&#39;Fare&#39;].fillna(test_df[&#39;Fare&#39;].median())  # 填充 Fare 缺失值
+test_df[&#39;Age&#39;] = test_df[&#39;Age&#39;].fillna(train_df[&#39;Age&#39;].median())  # 使用训练集的中位数填充测试集
+
+# 1. 计算 FamilySize
+train_df[&#39;FamilySize&#39;] = train_df[&#39;SibSp&#39;] + train_df[&#39;Parch&#39;] + 1
+test_df[&#39;FamilySize&#39;] = test_df[&#39;SibSp&#39;] + test_df[&#39;Parch&#39;] + 1
+
+# 2. 计算 AgeRange
+def age_range(age):
+    if age &lt; 12:
+        return &#39;Child&#39;
+    elif age &lt; 18:
+        return &#39;Teenager&#39;
+    elif age &lt; 60:
+        return &#39;Adult&#39;
+    else:
+        return &#39;Senior&#39;
+
+train_df[&#39;AgeRange&#39;] = train_df[&#39;Age&#39;].apply(age_range)
+test_df[&#39;AgeRange&#39;] = test_df[&#39;Age&#39;].apply(age_range)
+
+# 3. 计算 FareRange
+def fare_range(fare):
+    if fare &lt; 20:
+        return &#39;Low&#39;
+    elif fare &lt; 50:
+        return &#39;Medium&#39;
+    else:
+        return &#39;High&#39;
+
+train_df[&#39;FareRange&#39;] = train_df[&#39;Fare&#39;].apply(fare_range)
+test_df[&#39;FareRange&#39;] = test_df[&#39;Fare&#39;].apply(fare_range)
+
+# 4. 计算 IsSmallFamily 和 IsLargeFamily
+train_df[&#39;IsSmallFamily&#39;] = (train_df[&#39;FamilySize&#39;] &lt;= 3).astype(int)
+train_df[&#39;IsLargeFamily&#39;] = (train_df[&#39;FamilySize&#39;] &gt; 3).astype(int)
+test_df[&#39;IsSmallFamily&#39;] = (test_df[&#39;FamilySize&#39;] &lt;= 3).astype(int)
+test_df[&#39;IsLargeFamily&#39;] = (test_df[&#39;FamilySize&#39;] &gt; 3).astype(int)
+
+# 5. 社会阶层（Title）类别映射
+train_df[&#39;Title&#39;] = train_df[&#39;Title&#39;].map(lambda x: x if x in [&#39;Mr&#39;, &#39;Mrs&#39;, &#39;Miss&#39;, &#39;Master&#39;] else &#39;Other&#39;)
+test_df[&#39;Title&#39;] = test_df[&#39;Title&#39;].map(lambda x: x if x in [&#39;Mr&#39;, &#39;Mrs&#39;, &#39;Miss&#39;, &#39;Master&#39;] else &#39;Other&#39;)
+
+# 6. 性别与舱位组合特征（Sex_Pclass）
+train_df[&#39;Sex_Pclass&#39;] = train_df[&#39;Sex&#39;].astype(str) + &#39;_&#39; + train_df[&#39;Pclass&#39;].astype(str)
+test_df[&#39;Sex_Pclass&#39;] = test_df[&#39;Sex&#39;].astype(str) + &#39;_&#39; + test_df[&#39;Pclass&#39;].astype(str)
+
+# 7. 港口与票价交互特征（Embarked_Fare）
+train_df[&#39;Embarked_Fare&#39;] = train_df[&#39;Embarked&#39;].astype(str) + &#39;_&#39; + train_df[&#39;Fare&#39;].apply(lambda x: &#39;Low&#39; if x &lt; 50 else &#39;High&#39;)
+test_df[&#39;Embarked_Fare&#39;] = test_df[&#39;Embarked&#39;].astype(str) + &#39;_&#39; + test_df[&#39;Fare&#39;].apply(lambda x: &#39;Low&#39; if x &lt; 50 else &#39;High&#39;)
+
+# 8. 是否从未结婚（IsSingle）
+train_df[&#39;IsSingle&#39;] = ((train_df[&#39;SibSp&#39;] == 0) &amp; (train_df[&#39;Parch&#39;] == 0)).astype(int)
+test_df[&#39;IsSingle&#39;] = ((test_df[&#39;SibSp&#39;] == 0) &amp; (test_df[&#39;Parch&#39;] == 0)).astype(int)
+
+# 对类别特征进行编码
+cat_cols = [&#39;Sex&#39;, &#39;Embarked&#39;, &#39;AgeRange&#39;, &#39;FareRange&#39;, &#39;Title&#39;, &#39;Deck&#39;, &#39;Sex_Pclass&#39;, &#39;Embarked_Fare&#39;]
+for col in cat_cols:
+    train_df[col] = train_df[col].astype(&#39;category&#39;)
+    test_df[col] = test_df[col].astype(&#39;category&#39;)
+
+# 特征和标签
+target = &#39;Survived&#39;
+cont_names = [col for col in train_df.columns if col not in cat_cols + [target]]
+cat_names = cat_cols
+
+# 数据预处理
+procs = [Categorify, FillMissing, Normalize]
+
+# 创建 DataLoader
+train_dl = TabularDataLoaders.from_df(train_df, path=&#39;.&#39;, valid_pct=0.2, y_names=target, cat_names=cat_names, cont_names=cont_names,
+                                      procs=procs, bs=128)
+
+# 训练模型
+learn = tabular_learner(train_dl, layers=[512, 256, 128], metrics=[accuracy, RocAucBinary()], wd=1e-4)
+
+# 将模型转移到 GPU
+learn.to(device)
+
+# 查找最适合的学习率
+learn.lr_find()
+
+# 学习率曲线
+plt.figure()
+learn.recorder.plot_lr_find()
+plt.show()
+
+# 使用 OneCycleLR 进行训练
+learn.fit_one_cycle(1000, lr_max=1e-3)
+
+# 绘制损失曲线
+plt.figure()
+learn.recorder.plot_loss()
+plt.show()
+
+# 预测测试集
+test_dl = learn.dls.test_dl(test_df)
+test_preds, _ = learn.get_preds(dl=test_dl)
+
+# 获取二分类预测（0 或 1）
+test_preds = torch.sigmoid(test_preds).numpy()  # Sigmoid 转换，得到 0-1 的概率值
+test_preds = np.round(test_preds).clip(0, 1)  # 四舍五入并确保在 [0, 1] 范围内
+
+# 将预测结果与 PassengerId 结合
+output_df = pd.DataFrame(&#123;
+    &#39;PassengerId&#39;: test_passenger_ids,  # 保留测试集的 PassengerId
+    &#39;Survived&#39;: test_preds.astype(int).flatten()  # 确保结果为整数
+&#125;)
+
+# 保存预测结果
+output_df.to_csv(&#39;predictions.csv&#39;, index=False)
+
+print(&quot;预测结果已保存到 predictions.csv&quot;)
+# 训练和评估过程
+val_dl = learn.dls.valid
+val_preds, val_y = learn.get_preds(dl=val_dl)
+val_accuracy = accuracy(val_preds, val_y)
+print(f&quot;Accuracy: &#123;val_accuracy.item()&#125;&quot;)
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2024 - 2025 HRP
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;HRP
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

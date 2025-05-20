@@ -1,0 +1,589 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>机器学习-李宏毅2021课程-day1 | HRP</title>
+    <meta name="author" content="HRP" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <!-- KaTeX CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body);
+  });
+</script>
+<link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HRP</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HRP</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>机器学习-李宏毅2021课程-day1</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/1/4
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/ml/" style="color: #00a596">
+                    ml
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="Before-all"><a href="#Before-all" class="headerlink" title="Before all"></a>Before all</h1><p>今天是第一天学习ML，跟随着李宏毅老师的2021教学视频开始，今天主要是学习了ML的背景和基本原理以及最简单的ML模型构建和优化。<br>视频URL：<a target="_blank" rel="noopener" href="https://speech.ee.ntu.edu.tw/~hylee/ml/2022-spring.php">https://speech.ee.ntu.edu.tw/~hylee/ml/2022-spring.php</a></p>
+<span id="more"></span>
+
+<h1 id="关于机器学习的入门概念和理解"><a href="#关于机器学习的入门概念和理解" class="headerlink" title="关于机器学习的入门概念和理解"></a>关于机器学习的入门概念和理解</h1><h2 id="Machine-learning-≈-Looking-for-Function"><a href="#Machine-learning-≈-Looking-for-Function" class="headerlink" title="Machine learning ≈ Looking for Function"></a>Machine learning ≈ Looking for Function</h2><p>什么是机器学习，用通俗的概念就是寻找到一个可以输入的函数（输入内容可以是各式各样的例如音频，图像，文字）然后根据函数推测出和输出结果（输出结果也同样可以是各式各样的。）</p>
+<p><img src="https://github.com/user-attachments/assets/da4b3d11-a694-4453-9f92-98ef8fe206a3" alt="image"></p>
+<h2 id="Different-types-of-Functions"><a href="#Different-types-of-Functions" class="headerlink" title="Different types of Functions"></a>Different types of Functions</h2><p>根据上面的概念，函数的输出也可以分为下面2种：</p>
+<ol>
+<li><p>Regression</p>
+<p>根据输入输出数值标量。</p>
+</li>
+<li><p>Classification</p>
+<p>根据输入，从设定好的多个选项中选择性输出。（例如下图的垃圾邮件判断。而多个选项可以参考上面的图中的围棋的例子，就是从19x19的选项中选择出一个正确的落子位置。）</p>
+</li>
+</ol>
+<p><img src="https://github.com/user-attachments/assets/c30ea277-055e-4c07-88e4-32aa90d0b9db" alt="image"></p>
+<ol start="3">
+<li><p>Structured learning</p>
+<p>所谓Structured learning其实就是当今的ML输出并不局限于简单的数字输出，或者对选项进行选择性的输出。ML还可以进行文章、图像、音乐与视频的生成，通俗的说就是让机器学会进行创造性的生成有结构的事物。</p>
+</li>
+</ol>
+<p><img src="https://github.com/user-attachments/assets/3d65c23e-0607-471a-b585-321bb49afeb2" alt="image"></p>
+<h1 id="通过实例来逐步学习如何寻找函数-YouTube流量分析"><a href="#通过实例来逐步学习如何寻找函数-YouTube流量分析" class="headerlink" title="通过实例来逐步学习如何寻找函数-YouTube流量分析"></a>通过实例来逐步学习如何寻找函数-YouTube流量分析</h1><h2 id="1-函数目的"><a href="#1-函数目的" class="headerlink" title="1.函数目的"></a>1.函数目的</h2><p>通过寻找到一个函数，对未来的播放量进行预测</p>
+<p><img src="https://github.com/user-attachments/assets/40485055-a33d-4717-a960-e022051ce75b" alt="image"></p>
+<h2 id="2-定义一个最简单的线性函数来构建模型"><a href="#2-定义一个最简单的线性函数来构建模型" class="headerlink" title="2. 定义一个最简单的线性函数来构建模型"></a>2. 定义一个最简单的线性函数来构建模型</h2><p>如下图，我们把x1设置为数据来源中每一天的已知播放量，而w与b则是未知量，分别叫做weight（权重）和bias（偏移）。w和b都是Hyperparameters（超参数），也就是需要我们人为设定的参数。y则是我们的模型预测出来的结果，在这里就是对次日的播放量的预测。<br>$$<br>y&#x3D;b+wx_1<br>$$<br><img src="https://github.com/user-attachments/assets/c7ac92b9-2598-4b27-94a0-c477fd095497" alt="image"></p>
+<h2 id="3-定义损失函数Loss"><a href="#3-定义损失函数Loss" class="headerlink" title="3.定义损失函数Loss"></a>3.定义损失函数Loss</h2><p>在机器学习中， <strong>损失函数</strong>就是指模型的输出 y与真实值 y^ 之间概率分布差异的量化， 损失函数越小，模型的鲁棒性（稳定性）就越好。</p>
+<p>在本例中，Loss函数的输入就是我们的自定义超参数也就是bias和weight。</p>
+<p>那么我们怎么判断我们输入的b和w好不好呢，就需要我们对输入的结果进行误差统计，现在我们先采用的是差值绝对值(MAE)的方法计算误差值，如下图所示，把模型在1月2号的数据输入到模型得到1月3号的预测值是5.4k我们记作y，然后真实的1月3号的播放量为7.5k我们记作y^，通过二者作差得绝对值我们就得到了一组的误差为2.1k，以此类推我们可以得到所有的误差。</p>
+<p><img src="https://github.com/user-attachments/assets/f240187f-b466-438e-b9f5-bdf39a8daf08" alt="image"></p>
+<p>那么现在我们有了当前数据中每天预测数值与实际数值的误差，现在我们把误差求均值就得到了我们需要的Loss，当Loss越小则代表我们输入的b和w越好。</p>
+<p><img src="https://github.com/user-attachments/assets/8b3cf374-cb4c-41e7-8c74-76400501b440" alt="image"></p>
+<h2 id="4-求误差的2种方法"><a href="#4-求误差的2种方法" class="headerlink" title="4.求误差的2种方法"></a>4.求误差的2种方法</h2><p>分别有MAE与MSE 2种方法。选择哪种方法都是看个人的需求，这里我只给出我作为只学了一天理论的小白的个人基础看法。</p>
+<p>MAE得到的误差更加平稳中庸，MSE则更为极端毕竟用上了平方，好的结果则更好，坏的结果则更坏。</p>
+<p><img src="https://github.com/user-attachments/assets/f99b8720-23bf-4714-8760-5496d409b8bc" alt="image"></p>
+<h2 id="5-优化模型-通过梯度下降减少损失（gradient-descent）"><a href="#5-优化模型-通过梯度下降减少损失（gradient-descent）" class="headerlink" title="5.优化模型-通过梯度下降减少损失（gradient descent）"></a>5.优化模型-通过梯度下降减少损失（gradient descent）</h2><p>根据李老师的视频中关于梯度下降最简单的2点概念。</p>
+<p>1.随机选择一个权重w0。</p>
+<p>2.根据Loss与weight的在该权重w0下的微分（斜率）来调整w0，目的是为了让Loss更小。</p>
+<p><img src="https://github.com/user-attachments/assets/c8047793-dbc8-49a9-a2a1-875db730805e"></p>
+<p>那么现在我们的目的很明确，就是要想办法去往Loss下降的方向去调整w（weight），那么这个调整的范围是多少呢？</p>
+<p>李老师说这取决于2件事情：</p>
+<p>1.看L与w构造出的斜率，斜率越大就调整w的跨度大些，反之亦然。</p>
+<p>2.还涉及到一个自定义参数——learning rate(<strong>η</strong>) 这个数值越大训练速度就越快，反之亦然。</p>
+<p>根据这2件事情，我们可以得到下一次w1的值。公式如下<br>$$<br>w^1&#x3D;w^0-η\frac{\partial L}{\partial w} \big|_{w&#x3D;w^0}<br>$$<br>通过这个公式，反复更新w直到找到最合适的Loss。</p>
+<p><img src="https://github.com/user-attachments/assets/7e371955-83fb-4508-8530-ae0d5835db54" alt="image"></p>
+<p>Tips:这里方便理解，我自己举个例子，比如图上此时的Loss的斜率在w0是负数，然后我们可以自己设定<strong>η</strong>，<strong>η</strong>越大w1则越大则走的越远，训练速度也就越快，反之亦然。</p>
+<h3 id="5-1梯度下降存在的一些问题-表面问题-非核心"><a href="#5-1梯度下降存在的一些问题-表面问题-非核心" class="headerlink" title="5.1梯度下降存在的一些问题-表面问题 非核心"></a>5.1梯度下降存在的一些问题-表面问题 非核心</h3><p>根据下图，如果梯度下降在Loss等于0就停止了那它其实并没有找到让Loss最小的那个w值（也就是负数的那个），那么对于这种现象，李老师给出了如图的2个点的定义。对于这种情况下实际停止的点我们叫做local minima，对于这种情况下理论停止的点我们叫做global minima。不过李老师说 这并不是梯度下降模型的核心缺陷问题，后续会讲。</p>
+<p><img src="https://github.com/user-attachments/assets/551db64f-9086-4b45-8aa4-552fecbb0660" alt="image"></p>
+<h3 id="5-2梯度下降的多参数情况"><a href="#5-2梯度下降的多参数情况" class="headerlink" title="5.2梯度下降的多参数情况"></a>5.2梯度下降的多参数情况</h3><p>我们回到2中的公式定义<br>$$<br>y&#x3D;b+wx_1<br>$$<br>我们在该公式并不止有w（weight）是需要我们自定义寻找的，还有b（bias）也是。那么对于多个参数的梯度下降其实和单一参数并没有区别，可以参考下图。</p>
+<p><img src="https://github.com/user-attachments/assets/6c312d08-eb5e-4e53-97a7-183a29f14fa4"></p>
+<h2 id="6-小总结"><a href="#6-小总结" class="headerlink" title="6.小总结"></a>6.小总结</h2><p>那么对于最简单的一个ML的步骤，可以分为如下3个步骤。</p>
+<p>1.定义函数</p>
+<p>2.定义损失函数</p>
+<p>3.优化损失函数的输出</p>
+<p><img src="https://github.com/user-attachments/assets/447a94b2-ca27-47b7-a27f-57f0c4d08e37" alt="image"></p>
+<h2 id="7-优化模型-根据预测结果与实际需求优化模型的数学函数"><a href="#7-优化模型-根据预测结果与实际需求优化模型的数学函数" class="headerlink" title="7.优化模型-根据预测结果与实际需求优化模型的数学函数"></a>7.优化模型-根据预测结果与实际需求优化模型的数学函数</h2><p>根据李老师视频中的图，我们可以发现这个播放量是有周期性的，每七日就有2天低谷期，那么我们之前的模型只是单一的用前一天的数据预测后一天的数据，也就是说周期只是一，是一个比较低能的模型只能预测一天。</p>
+<p><img src="https://github.com/user-attachments/assets/0c17438d-ff7a-4411-9958-1017990274a5" alt="image"></p>
+<p>为了能预测的更长远，我们需要对模型进行修改。我们可以预测7天，28天，N天。如图所示。</p>
+<p>其中每天的w和b都会通过之前提到梯度下降来寻找到最优值，然后依次代入模型最后得出未来N+1天的播放量。</p>
+<p><img src="https://github.com/user-attachments/assets/56d5d6b4-28ab-44a6-a768-cb7ba95d35da" alt="image"></p>
+<p>Tips 示例：</p>
+<p>如果你有如下数据：</p>
+<ul>
+<li>x1&#x3D;100 （第1天播放量）</li>
+<li>x2&#x3D;150 （第2天播放量）</li>
+<li>x3&#x3D;120 （第3天播放量）</li>
+<li>x4&#x3D;130 （第4天播放量）</li>
+<li>x5&#x3D;140 （第5天播放量）</li>
+<li>x6&#x3D;110 （第6天播放量）</li>
+<li>x7&#x3D;160 （第7天播放量）</li>
+</ul>
+<p>以及相应的权重：</p>
+<ul>
+<li>w1&#x3D;0.1</li>
+<li>w2&#x3D;0.2</li>
+<li>w3&#x3D;0.15</li>
+<li>w4&#x3D;0.1</li>
+<li>w5&#x3D;0.25</li>
+<li>w6&#x3D;0.05</li>
+<li>w7&#x3D;0.15</li>
+</ul>
+<p>那么，预测结果 y会是：<br>$$<br>y &#x3D; b + (w_1x_1 + w_2x_2 + w_3x_3 + w_4x_4 + w_5x_5 + w_6x_6 + w_7x_7)<br>$$<br>即：<br>$$<br>y &#x3D; b + (0.1 \times 100 + 0.2 \times 150 + 0.15 \times 120 + 0.1 \times 130 + 0.25 \times 140 + 0.05 \times 110 + 0.15 \times 160)<br>$$</p>
+<ul>
+<li>**上限 i&#x3D;7表示你考虑的是过去 **7天 或 <strong>7个时间步</strong> 的播放量数据，每个数据点都有一个对应的权重 wi。</li>
+<li>这个加权求和模型试图通过这些过去的播放量数据来预测未来的播放量。每个 wi表示第 i天的播放量对最终预测的贡献程度。</li>
+</ul>
+<p>最终的 y 代表的是 <strong>基于过去7天播放量的加权预测值</strong>。</p>
+<h2 id="8-线性模型太simple了，我们需要更曲线化的模型"><a href="#8-线性模型太simple了，我们需要更曲线化的模型" class="headerlink" title="8.线性模型太simple了，我们需要更曲线化的模型"></a>8.线性模型太simple了，我们需要更曲线化的模型</h2><h3 id="1-线性模型的限制"><a href="#1-线性模型的限制" class="headerlink" title="1.线性模型的限制"></a><strong>1.线性模型的限制</strong></h3><ul>
+<li>线性模型只能表示线性关系，无法模拟复杂的非线性模式。</li>
+<li>通过修改权重 w 和偏置 b，只会改变直线的斜率和截距，无法适应数据的复杂性。</li>
+<li>现实中的数据关系常常是非线性的，比如某些范围内的正相关，超出范围后的反相关。</li>
+</ul>
+<h3 id="2-模型偏差与解决方案"><a href="#2-模型偏差与解决方案" class="headerlink" title="2. 模型偏差与解决方案"></a><strong>2. 模型偏差与解决方案</strong></h3><ul>
+<li>线性模型的局限性称为模型偏差 (Model Bias)，与偏置 b不同。</li>
+<li>需要设计更复杂且灵活的函数来描述真实数据。</li>
+<li>红色曲线可以看作常数项和多个特定函数的组合，从而形成非线性模式。</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/6f2bb882-dc5c-40a3-9d3e-dce97c39dc02"></p>
+<h3 id="3-蓝色函数与分段线性曲线"><a href="#3-蓝色函数与分段线性曲线" class="headerlink" title="3.蓝色函数与分段线性曲线"></a><strong>3.蓝色函数与分段线性曲线</strong></h3><ul>
+<li>蓝色函数描述分段线性曲线的局部行为，如水平、斜坡和拐点。</li>
+<li>红色曲线可以通过多个蓝色函数的组合来逼近。</li>
+<li>增加蓝色函数的数量可以更精确地拟合复杂的分段线性曲线。</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/de412d43-2fb4-4b54-8dbd-f3862fc4f3ac"></p>
+<p><img src="https://github.com/user-attachments/assets/d7145c4b-ddc3-43c5-a13f-9ba88ac97541" alt="image"></p>
+<h3 id="4-曲线逼近与模型灵活性"><a href="#4-曲线逼近与模型灵活性" class="headerlink" title="4.曲线逼近与模型灵活性"></a><strong>4.曲线逼近与模型灵活性</strong></h3><ul>
+<li>分段线性曲线能够逼近任何连续曲线。</li>
+<li>任何复杂的非线性关系都可以通过足够的蓝色函数与常数项来逼近。</li>
+<li>关键问题是如何具体构建这些函数。</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/e94f3108-5fbc-4ff8-ae99-739cb6af6fcf" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/db58ab45-5472-437a-8701-ac915d79c56d" alt="image"></p>
+<h3 id="5-Sigmoid-函数的应用"><a href="#5-Sigmoid-函数的应用" class="headerlink" title="5.Sigmoid 函数的应用"></a><strong>5.Sigmoid 函数的应用</strong></h3><ul>
+<li><p>Sigmoid 函数可以作为蓝色函数的近似，表现为平滑的S型曲线。</p>
+</li>
+<li><p>数学表达式为<br>$$<br>y &#x3D; \frac{c}{1 + e^{-(b + wx_1)}}&#x3D;c*sigmoid(b+wx_1)<br>$$<br>，其中 c是调整参数。</p>
+</li>
+<li><p>Sigmoid 函数能够将极大值和极小值控制在预期范围内，模拟非线性特性。</p>
+</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/5411b398-efa1-4ec6-95db-1a465e1f856b" alt="image"></p>
+<p>通过调整b，w，c可以得到不同的曲线</p>
+<p><img src="https://github.com/user-attachments/assets/15af3ced-34ff-4396-8924-e56573d75390" alt="image"></p>
+<h3 id="6-函数的组成与叠加"><a href="#6-函数的组成与叠加" class="headerlink" title="6.函数的组成与叠加"></a><strong>6.函数的组成与叠加</strong></h3><ul>
+<li>讨论如何利用基础函数组合更复杂的函数，</li>
+<li>使用蓝色函数的参数 w,b,c 来生成红色曲线，</li>
+<li>通过加总多个蓝色函数实现不同的分段线性曲线。</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/005c8ef3-9067-437b-817b-dc4b32ea4a0c" alt="image"></p>
+<h3 id="7-增强模型灵活性"><a href="#7-增强模型灵活性" class="headerlink" title="7.增强模型灵活性"></a><strong>7.增强模型灵活性</strong></h3><ul>
+<li><p>解决线性模型的局限，通过引入未知参数扩展模型的表现力，</p>
+</li>
+<li><p>通过不同的 wi,bi,ci来组合更灵活的函数，逼近各种连续函数。</p>
+<p><img src="https://github.com/user-attachments/assets/6cc389b6-5803-4155-9b82-efc584cae9e0" alt="image"></p>
+</li>
+<li><p>引入多变量特征进一步提升模型适应性。</p>
+</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/a803c0a9-6544-4342-a663-3cd3fbaad953" alt="image"></p>
+<h3 id="8-多特征函数的实现"><a href="#8-多特征函数的实现" class="headerlink" title="8.多特征函数的实现"></a><strong>8.多特征函数的实现</strong></h3><ul>
+<li><p>讲解多特征函数的计算过程，</p>
+</li>
+<li><p>蓝色函数与 Sigmoid 函数的关系及其对多特征的影响。</p>
+<p><img src="https://github.com/user-attachments/assets/aa820e10-43fb-444f-9741-8e0b707b2127"></p>
+</li>
+<li><p>用矩阵运算表示多重特征的加权输入，简化计算过程。</p>
+</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/7840fd1c-0432-418e-b2a6-3e5f254d7ec5"></p>
+<h3 id="9-矩阵与向量表示"><a href="#9-矩阵与向量表示" class="headerlink" title="9.矩阵与向量表示"></a><strong>9.矩阵与向量表示</strong></h3><ul>
+<li><p>将多特征函数的计算转化为矩阵形式，</p>
+</li>
+<li><p>使用矩阵 w、向量 x和偏置 b表达模型计算核心，</p>
+</li>
+<li><p>简化表达式，使公式更直观易懂。<br>$$<br>r&#x3D;b+wx<br>$$</p>
+</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/8d974976-9ea8-4172-bf16-49f680ff68a4" alt="image"></p>
+<p>进一步的简化表示带上sigmoid<br>$$<br>a&#x3D;σ(r)<br>$$<br><img src="https://github.com/user-attachments/assets/66c76e8b-8030-42c7-a456-289edcf5b2e2" alt="image"></p>
+<p>最后再乘上ci与加上b，得到最终表达式。<br>$$<br>y&#x3D;c^T+a<br>$$<br><img src="https://github.com/user-attachments/assets/2b46ee2c-8900-4a8d-8f34-61b8ef7a5bc5" alt="image"></p>
+<p>总图</p>
+<p><img src="https://github.com/user-attachments/assets/592cfe16-71a8-4e54-b545-13e281b7f676" alt="image"></p>
+<p><img src="https://github.com/user-attachments/assets/455649b9-d1ea-4c9c-a032-1cf145cb1f10" alt="image"></p>
+<h3 id="10-表达方式统一与参数定义"><a href="#10-表达方式统一与参数定义" class="headerlink" title="10.表达方式统一与参数定义"></a><strong>10.表达方式统一与参数定义</strong></h3><ul>
+<li><p>图示化和线性代数方式表达同一函数，帮助理解。</p>
+</li>
+<li><p>引入未知参数（如 w,b,c）并重新定义符号与功能。</p>
+</li>
+<li><p>所有未知参数整合为长向量 θ，统一表示未知参数。</p>
+<p>θ中的数值来自于各个未知的参数（b,c,w)</p>
+</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/9b9b3e4b-e954-4704-8be1-eeff263d418d" alt="image"></p>
+<p>综上，现在完成了改写模型函数，重新定义了未知数。</p>
+<p><img src="https://github.com/user-attachments/assets/5cb1e186-5164-4989-a766-1b999e0f4e3b" alt="image"></p>
+<p>现在开始继续定义损失函数。</p>
+<p><strong>11.定义损失函数与参数更新</strong></p>
+<ul>
+<li><p>利用 θ表示所有参数，简化损失函数 L(θ)的表示。</p>
+<p>其实这个Loss定义和之前并无多大区别，核心的区别就在于替换了之前的标量输入参数b，w为现在的未知参数向量组θ。</p>
+</li>
+</ul>
+<p><img src="https://github.com/user-attachments/assets/8a4f7846-745d-43af-b697-2627d5abeb7b" alt="image"></p>
+<ul>
+<li>计算每个参数对损失函数的梯度，并将其组合成梯度向量 g。</li>
+<li>根据梯度向量，通过学习率更新参数，进行迭代优化。</li>
+</ul>
+<p>我们之前提到的计算步长的是标量下的计算，Loss只对其中的一个未知变量求微分然后乘上learning rate得到步长。</p>
+<p>但是现在我们是未知变量是一个向量组，所以我们的微分也应当对应为向量组，如下图。</p>
+<p>随机生成一组未知向量组，然后减去步长，得到下次的未知向量组。</p>
+<p><img src="https://github.com/user-attachments/assets/c61dd4fd-97d8-4548-b904-fe5955b0a439" alt="image"></p>
+<h3 id="11-Batch、Loss-与参数更新概念"><a href="#11-Batch、Loss-与参数更新概念" class="headerlink" title="11.Batch、Loss 与参数更新概念"></a><strong>11.Batch、Loss 与参数更新概念</strong></h3><ul>
+<li><p>使用 Batch 计算 Loss，通过该梯度更新参数。（Batch的划分是随意的，看需求。）</p>
+</li>
+<li><p>定义 Epoch 与 Update 的区别：所有 Batch 完成一次更新称为 Epoch，每次更新Loss函数的参数称为 Update。</p>
+<p><img src="https://github.com/user-attachments/assets/f99c8bb0-c577-4bb4-9842-45c462b8ccff" alt="image"></p>
+</li>
+<li><p>例如，若 N&#x3D;10000，Batch Size &#x3D; 10，Epoch 包含 1000 次 Update。</p>
+</li>
+</ul>
+<h3 id="12-激活函数的选择与应用"><a href="#12-激活函数的选择与应用" class="headerlink" title="12.激活函数的选择与应用"></a><strong>12.激活函数的选择与应用</strong></h3><p>不一定要选择光滑的曲线，如果有需求也可以选择硬直的曲线叫做 Hard Sigmoid 。</p>
+<ul>
+<li><p>Hard Sigmoid 可视为两个 ReLU 函数的加和，讨论 ReLU 的特性与公式。</p>
+<p> 通过把多个ReLU函数加和可以得到hard sigmoid，如图。</p>
+<p><img src="https://github.com/user-attachments/assets/3b198710-b3d8-42cf-b1e2-f2beac87d353" alt="image"></p>
+<p>无论是之前的soft sigmoid还是现在的hard sigmoid我们都叫做activation function（激活函数）</p>
+<p>（下图的hard的i为什么是2i，是因为他是2个ReLU的加和）</p>
+<p><img src="https://github.com/user-attachments/assets/76cd76a1-ec7c-4f3e-acd2-28b2bfb64643" alt="image"></p>
+</li>
+<li><p>对比 Sigmoid 和 ReLU 激活函数，指出 ReLU 常见于实验应用中。</p>
+</li>
+</ul>
+<p>从结果论出发（目前还没学到）ReLU 也就是hard sigmoid 比soft sigmoid好。下面是GPT的分析，自行查看吧。</p>
+<p><strong>Hard Sigmoid</strong> 和 <strong>Soft Sigmoid（标准Sigmoid）</strong> 各有特点，它们在不同场景中的优劣势取决于具体的应用需求和优化目标。以下是为什么 <strong>Hard Sigmoid</strong> 在某些情况下比 <strong>Soft Sigmoid</strong> 更好的原因：</p>
+<hr>
+<ol>
+<li><strong>计算效率</strong></li>
+</ol>
+<ul>
+<li><p><strong>Soft Sigmoid</strong>: 标准 Sigmoid 函数定义为：</p>
+<p>σ(x)&#x3D;11+e−x\sigma(x) &#x3D; \frac{1}{1 + e^{-x}}</p>
+<p>它包含指数运算 e−xe^{-x}，这是一个计算成本较高的非线性操作。</p>
+</li>
+<li><p><strong>Hard Sigmoid</strong>: Hard Sigmoid 是 Soft Sigmoid 的近似形式，通常表示为：</p>
+<p>HardSigmoid(x)&#x3D;clip(0.2x+0.5,0,1)\text{HardSigmoid}(x) &#x3D; \text{clip}(0.2x + 0.5, 0, 1)</p>
+<p>其中 <code>clip</code> 将结果限制在 [0,1][0, 1] 范围内。 这只需要进行简单的线性运算 0.2x+0.50.2x + 0.5 和裁剪操作，而不需要复杂的指数计算。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>计算量更少</strong>，适用于计算资源有限的场景。</li>
+<li>在深度学习中，尤其是嵌入式设备或实时任务中，Hard Sigmoid 可以显著提高模型的推理速度。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ol start="2">
+<li><strong>梯度消失问题</strong></li>
+</ol>
+<ul>
+<li><p><strong>Soft Sigmoid</strong>: 在标准 Sigmoid 中，当 xx 非常大或非常小时，函数值趋近于 0 或 1，梯度趋近于 0（因为 Sigmoid 的导数是 σ(x)(1−σ(x))\sigma(x)(1-\sigma(x))，当 σ(x)\sigma(x) 接近 0 或 1 时，导数很小）。这会导致 <strong>梯度消失</strong> 问题，使得网络在训练中很难更新参数。</p>
+</li>
+<li><p><strong>Hard Sigmoid</strong>: Hard Sigmoid 的梯度在大部分输入范围内是 <strong>恒定的线性梯度</strong>，除非在 [0,1][0, 1] 范围之外裁剪时梯度为零。因此，它相比 Soft Sigmoid，更不容易发生梯度消失问题。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>使得训练过程中的参数更新更稳定，尤其在深层网络中。</li>
+<li>对于需要快速收敛的任务，Hard Sigmoid 能加速训练。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ol start="3">
+<li><strong>避免数值不稳定</strong></li>
+</ol>
+<ul>
+<li><p><strong>Soft Sigmoid</strong>: 在计算过程中，由于指数运算可能会出现数值不稳定的情况（比如 e−xe^{-x} 可能导致溢出或精度损失，尤其当 xx 的取值范围非常大时）。</p>
+</li>
+<li><p><strong>Hard Sigmoid</strong>: 使用简单的线性函数和裁剪，不涉及指数运算，因此完全避免了数值不稳定的问题。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>对于具有大范围输入值的数据，Hard Sigmoid 更稳健。</li>
+<li>在低精度硬件（如量化计算）中，Hard Sigmoid 更易实现且更加可靠。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ol start="4">
+<li><strong>对稀疏表示的支持</strong></li>
+</ol>
+<ul>
+<li><p><strong>Soft Sigmoid</strong>: Soft Sigmoid 的输出值在 [0,1][0, 1] 范围内连续分布，可能会导致某些特征难以被激活。</p>
+</li>
+<li><p><strong>Hard Sigmoid</strong>: Hard Sigmoid 的线性区域更加明确，且裁剪操作使得大部分小值被直接裁剪为 0（稀疏化特性）。这种稀疏化特性在某些任务中（如特征选择或神经网络的稀疏化）有助于更好的泛化能力。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>支持更稀疏的特征表示，有助于减少计算量和提高模型的效率。</li>
+<li>在某些场景下（如正则化或特征选择任务）可能带来更好的性能。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ol start="5">
+<li><strong>适用于量化网络</strong></li>
+</ol>
+<ul>
+<li><strong>Hard Sigmoid</strong> 在量化神经网络（Quantized Neural Networks, QNNs）中特别常用，因为它的线性区域便于表示成低精度值，从而适配硬件加速。</li>
+<li>而 Soft Sigmoid 由于包含指数运算，其非线性特性不适合量化实现。</li>
+</ul>
+<hr>
+<p>Soft Sigmoid vs Hard Sigmoid 对比总结</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th><strong>Soft Sigmoid</strong></th>
+<th><strong>Hard Sigmoid</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>计算复杂度</strong></td>
+<td>高（指数运算）</td>
+<td>低（简单线性+裁剪）</td>
+</tr>
+<tr>
+<td><strong>梯度消失问题</strong></td>
+<td>严重（在极值处梯度趋近 0）</td>
+<td>不明显（线性部分梯度恒定）</td>
+</tr>
+<tr>
+<td><strong>数值稳定性</strong></td>
+<td>可能有数值溢出或不稳定</td>
+<td>稳定（无指数运算）</td>
+</tr>
+<tr>
+<td><strong>稀疏特性</strong></td>
+<td>输出连续分布，无稀疏性</td>
+<td>稀疏化特性明显（裁剪使部分值为 0）</td>
+</tr>
+<tr>
+<td><strong>适合低计算资源场景</strong></td>
+<td>不适合</td>
+<td>非常适合</td>
+</tr>
+<tr>
+<td><strong>适合量化网络</strong></td>
+<td>不适合</td>
+<td>非常适合</td>
+</tr>
+</tbody></table>
+<hr>
+<p>什么时候使用 Hard Sigmoid 更好？</p>
+<ol>
+<li><strong>计算资源有限</strong>：在嵌入式设备、移动设备或实时任务中，Hard Sigmoid 的计算效率更高。</li>
+<li><strong>深层网络</strong>：在深度网络中，Hard Sigmoid 的梯度更稳定，不容易导致梯度消失。</li>
+<li><strong>需要稀疏特性</strong>：对于任务需要更稀疏的激活特征时（如神经网络正则化或特征选择任务）。</li>
+<li><strong>量化模型</strong>：如果模型需要量化（如 QNN），Hard Sigmoid 更适合硬件实现。</li>
+</ol>
+<hr>
+<p>总结</p>
+<p><strong>Hard Sigmoid 比 Soft Sigmoid 更好</strong>，主要在于其 <strong>计算简单</strong>、<strong>梯度稳定</strong>、<strong>数值稳定性高</strong>，以及适合 <strong>资源受限或量化模型</strong> 的场景。而 Soft Sigmoid 适合需要更精确的非线性建模的场景，比如一些对非线性边界要求较高的任务。</p>
+<h2 id="9-额外文化常识"><a href="#9-额外文化常识" class="headerlink" title="9.额外文化常识"></a>9.额外文化常识</h2><p>在过去80,90年代特别流行神经网络（neural network）以至于名声被弄臭了，然后paper带这个的都被毙了。</p>
+<p><img src="https://github.com/user-attachments/assets/0beb5485-289f-4e33-8fff-587b84b9efd0" alt="image"></p>
+<p>为了解决这个抽象的问题，现在人们把neuron换成了layer，而原来的neural network就被叫做了deep，综合后这套技术就成了现在的deep learning。</p>
+<p><img src="https://github.com/user-attachments/assets/fa935566-36ed-4083-ab63-50336da2d301" alt="image"></p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2024 - 2025 HRP
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;HRP
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

@@ -1,0 +1,511 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>机器学习-李宏毅2021课程-day2 | HRP</title>
+    <meta name="author" content="HRP" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <!-- KaTeX CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body);
+  });
+</script>
+<link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HRP</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HRP</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>机器学习-李宏毅2021课程-day2</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/1/7
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/ml/" style="color: #00bcd4">
+                    ml
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="Before-All"><a href="#Before-All" class="headerlink" title="Before All"></a>Before All</h1><p>今天先完成下HW1，阅读理解下代码。</p>
+<p>代码来源李宏毅老师的blog：<a target="_blank" rel="noopener" href="https://speech.ee.ntu.edu.tw/~hylee/ml/2022-spring.php">ML 2022 Spring</a></p>
+<span id="more"></span>
+
+<pre><code class="python"># 导入必要的库
+import math
+import numpy as np
+import pandas as pd
+import os
+import csv
+from tqdm import tqdm
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader, random_split
+from torch.utils.tensorboard import SummaryWriter
+
+# 固定随机数种子以确保结果可复现
+def same_seed(seed):
+    &#39;&#39;&#39;设置随机数生成器种子，确保实验可复现。&#39;&#39;&#39;
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
+# 划分训练集和验证集
+def train_valid_split(data_set, valid_ratio, seed):
+    &#39;&#39;&#39;将提供的训练数据集划分为训练集和验证集&#39;&#39;&#39;
+    valid_set_size = int(valid_ratio * len(data_set))  # 计算验证集大小
+    train_set_size = len(data_set) - valid_set_size  # 计算训练集大小
+    train_set, valid_set = random_split(data_set, [train_set_size, valid_set_size], generator=torch.Generator().manual_seed(seed))
+    return np.array(train_set), np.array(valid_set)
+
+# 模型预测
+def predict(test_loader, model, device):
+    &#39;&#39;&#39;使用训练好的模型进行预测&#39;&#39;&#39;
+    model.eval()  # 设置模型为评估模式
+    preds = []
+    for x in tqdm(test_loader):  # 遍历测试集
+        x = x.to(device)  # 将数据移至计算设备
+        with torch.no_grad():  # 不计算梯度，减少内存消耗
+            pred = model(x)  # 获取模型预测结果
+            preds.append(pred.detach().cpu())  # 将结果从GPU移至CPU
+    preds = torch.cat(preds, dim=0).numpy()  # 合并所有预测结果
+    return preds
+
+# 自定义数据集类，用于Pytorch的数据加载
+class COVID19Dataset(Dataset):
+    &#39;&#39;&#39;定义一个COVID-19数据集类&#39;&#39;&#39;
+    def __init__(self, x, y=None):
+        if y is None:
+            self.y = y
+        else:
+            self.y = torch.FloatTensor(y)  # 目标变量y
+        self.x = torch.FloatTensor(x)  # 特征x
+
+    def __getitem__(self, idx):
+        &#39;&#39;&#39;返回指定索引的数据&#39;&#39;&#39;
+        if self.y is None:
+            return self.x[idx]
+        else:
+            return self.x[idx], self.y[idx]
+
+    def __len__(self):
+        &#39;&#39;&#39;返回数据集的大小&#39;&#39;&#39;
+        return len(self.x)
+
+# 自定义神经网络模型
+class My_Model(nn.Module):
+    def __init__(self, input_dim):
+        super(My_Model, self).__init__()
+        &#39;&#39;&#39;定义一个简单的前馈神经网络模型&#39;&#39;&#39;
+        #递减神经元数量并采用ReLU激活函数。
+        self.layers = nn.Sequential(
+            nn.Linear(input_dim, 16),
+            nn.ReLU(),
+            nn.Linear(16, 8),
+            nn.ReLU(),
+            nn.Linear(8, 1)
+        )
+
+    def forward(self, x):
+        &#39;&#39;&#39;定义前向传播过程&#39;&#39;&#39;
+        x = self.layers(x)
+        x = x.squeeze(1)  # (B, 1) -&gt; (B)
+        return x
+
+# 选择特征用于回归分析
+def select_feat(train_data, valid_data, test_data, select_all=True):
+    &#39;&#39;&#39;选择合适的特征用于回归模型训练&#39;&#39;&#39;
+    y_train, y_valid = train_data[:,-1], valid_data[:,-1]
+    raw_x_train, raw_x_valid, raw_x_test = train_data[:,:-1], valid_data[:,:-1], test_data
+
+    if select_all:
+        feat_idx = list(range(raw_x_train.shape[1]))  # 使用所有特征
+    else:
+        feat_idx = [0,1,2,3,4]  # 选择合适的特征列
+        
+    return raw_x_train[:,feat_idx], raw_x_valid[:,feat_idx], raw_x_test[:,feat_idx], y_train, y_valid
+
+# 训练与验证模型
+def trainer(train_loader, valid_loader, model, config, device):
+    &#39;&#39;&#39;训练模型并进行验证&#39;&#39;&#39;
+    criterion = nn.MSELoss(reduction=&#39;mean&#39;)  # 定义均方误差损失函数
+
+    # 定义优化算法
+    optimizer = torch.optim.SGD(model.parameters(), lr=config[&#39;learning_rate&#39;], momentum=0.9)  # 使用SGD优化器
+
+    writer = SummaryWriter()  # TensorBoard的Writer
+
+    if not os.path.isdir(&#39;./models&#39;):
+        os.mkdir(&#39;./models&#39;)  # 如果模型保存文件夹不存在，则创建
+
+    n_epochs, best_loss, step, early_stop_count = config[&#39;n_epochs&#39;], math.inf, 0, 0
+
+    for epoch in range(n_epochs):
+        model.train()  # 设置模型为训练模式
+        loss_record = []
+        train_pbar = tqdm(train_loader, position=0, leave=True)  # 进度条显示
+
+        for x, y in train_pbar:
+            optimizer.zero_grad()  # 将梯度清零
+            x, y = x.to(device), y.to(device)  # 将数据移至计算设备
+            pred = model(x)  # 模型预测
+            loss = criterion(pred, y)  # 计算损失
+            loss.backward()  # 反向传播
+            optimizer.step()  # 更新参数
+            step += 1
+            loss_record.append(loss.detach().item())  # 记录损失
+
+            # 更新进度条显示
+            train_pbar.set_description(f&#39;Epoch [&#123;epoch+1&#125;/&#123;n_epochs&#125;]&#39;)
+            train_pbar.set_postfix(&#123;&#39;loss&#39;: loss.detach().item()&#125;)
+
+        mean_train_loss = sum(loss_record) / len(loss_record)
+        writer.add_scalar(&#39;Loss/train&#39;, mean_train_loss, step)
+
+        # 验证集评估
+        model.eval()  # 设置模型为评估模式
+        loss_record = []
+        for x, y in valid_loader:
+            x, y = x.to(device), y.to(device)
+            with torch.no_grad():  # 不计算梯度
+                pred = model(x)
+                loss = criterion(pred, y)
+            loss_record.append(loss.item())
+            
+        mean_valid_loss = sum(loss_record) / len(loss_record)
+        print(f&#39;Epoch [&#123;epoch+1&#125;/&#123;n_epochs&#125;]: Train loss: &#123;mean_train_loss:.4f&#125;, Valid loss: &#123;mean_valid_loss:.4f&#125;&#39;)
+        writer.add_scalar(&#39;Loss/valid&#39;, mean_valid_loss, step)
+
+        # 如果验证集损失较低，则保存模型
+        if mean_valid_loss &lt; best_loss:
+            best_loss = mean_valid_loss
+            torch.save(model.state_dict(), config[&#39;save_path&#39;])  # 保存最佳模型
+            print(f&#39;Saving model with loss &#123;best_loss:.3f&#125;...&#39;)
+            early_stop_count = 0
+        else:
+            early_stop_count += 1
+
+        # 如果早停次数超过设定值，则停止训练
+        if early_stop_count &gt;= config[&#39;early_stop&#39;]:
+            print(&#39;\nModel is not improving, halting the training process.&#39;)
+            return
+
+# 配置参数
+config = &#123;
+    &#39;seed&#39;: 5201314,      # 随机种子
+    &#39;select_all&#39;: True,   # 是否使用所有特征
+    &#39;valid_ratio&#39;: 0.2,   # 验证集占比
+    &#39;n_epochs&#39;: 3000,     # 训练周期
+    &#39;batch_size&#39;: 256,    # 批次大小
+    &#39;learning_rate&#39;: 1e-5,  # 学习率
+    &#39;early_stop&#39;: 400,    # 早停策略
+    &#39;save_path&#39;: &#39;./models/model.ckpt&#39;  # 模型保存路径
+&#125;
+
+# 设置随机数种子
+same_seed(config[&#39;seed&#39;])
+
+# 加载训练数据和测试数据
+train_data, test_data = pd.read_csv(&#39;./covid.train.csv&#39;).values, pd.read_csv(&#39;./covid.test.csv&#39;).values
+train_data, valid_data = train_valid_split(train_data, config[&#39;valid_ratio&#39;], config[&#39;seed&#39;])
+
+# 输出数据集大小
+print(f&quot;&quot;&quot;train_data size: &#123;train_data.shape&#125; 
+valid_data size: &#123;valid_data.shape&#125; 
+test_data size: &#123;test_data.shape&#125;&quot;&quot;&quot;)
+
+# 选择特征
+x_train, x_valid, x_test, y_train, y_valid = select_feat(train_data, valid_data, test_data, config[&#39;select_all&#39;])
+
+# 输出特征数量
+print(f&#39;number of features: &#123;x_train.shape[1]&#125;&#39;)
+
+# 创建数据集实例
+train_dataset, valid_dataset, test_dataset = COVID19Dataset(x_train, y_train), \
+                                            COVID19Dataset(x_valid, y_valid), \
+                                            COVID19Dataset(x_test)
+
+# 创建数据加载器
+train_loader = DataLoader(train_dataset, batch_size=config[&#39;batch_size&#39;], shuffle=True, pin_memory=True)
+valid_loader = DataLoader(valid_dataset, batch_size=config[&#39;batch_size&#39;], shuffle=True, pin_memory=True)
+test_loader = DataLoader(test_dataset, batch_size=config[&#39;batch_size&#39;], shuffle=False, pin_memory=True)
+
+# 创建并训练模型
+model = My_Model(input_dim=x_train.shape[1]).to(device)  # 创建模型并将其移动到计算设备
+trainer(train_loader, valid_loader, model, config, device)
+
+# 保存预测结果
+def save_pred(preds, file):
+    &#39;&#39;&#39;保存预测结果到指定文件&#39;&#39;&#39;
+    with open(file, &#39;w&#39;) as fp:
+        writer = csv.writer(fp)
+        writer.writerow([&#39;id&#39;, &#39;tested_positive&#39;])  # 写入标题
+        for i, p in enumerate(preds):
+            writer.writerow([i, p])  # 写入预测结果
+
+# 加载训练好的模型并进行预测
+model = My_Model(input_dim=x_train.shape[1]).to(device)
+model.load_state_dict(torch.load(config[&#39;save_path&#39;]))  # 加载模型权重
+preds = predict(test_loader, model, device)  # 使用模型进行预测
+save_pred(preds, &#39;pred.csv&#39;)  # 保存预测结果
+</code></pre>
+<p>代码流程图如下</p>
+<pre><code class="text">开始
+│
+├── 设置随机种子
+│   ├── 确保实验可重复性
+│
+├── 加载数据
+│   ├── 加载训练数据
+│   ├── 加载测试数据
+│   └── 分割数据集（训练集、验证集）
+│
+├── 选择特征
+│   ├── 根据配置选择特征
+│   └── 准备输入数据
+│
+├── 定义数据集类
+│   ├── 定义如何获取数据
+│   └── 返回数据集长度
+│
+├── 定义模型
+│   ├── 输入层、隐藏层、输出层
+│   └── 激活函数
+│
+├── 训练与验证
+│   ├── 使用训练数据训练模型
+│   ├── 使用验证数据评估性能
+│   └── 保存最佳模型
+│
+├── 预测
+│   ├── 加载最佳模型
+│   ├── 使用测试集进行预测
+│   └── 保存预测结果
+│
+└── 输出结果
+    ├── 保存结果到 `pred.csv`
+    └── 格式：`id, tested_positive`
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2024 - 2025 HRP
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;HRP
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>
